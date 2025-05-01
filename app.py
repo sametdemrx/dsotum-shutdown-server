@@ -1,25 +1,21 @@
-from flask import Flask, request, jsonify
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+from flask import Flask
 
-
+# Flask uygulamasını başlatıyoruz
 app = Flask(__name__)
-latest_command = None
 
+# Ana sayfa route'u
 @app.route('/')
-def index():
-    return '<h1 style="color:red; background:black; text-align:center;">DSOTUM: Gölge Komut Merkezi</h1>'
+def home():
+    return "DSOTUM: Gölge Komut Merkezi"
 
+# Shutdown komutunu alacak route
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
-    global latest_command
-    latest_command = 'shutdown'
-    return 'Komut gönderildi', 200
+    # Sistem kapanma işlemi burada yapılacak
+    import os
+    os.system("shutdown /s /f /t 1")  # Windows için, Linux/Mac için farklı komutlar kullanabilirsiniz
+    return "Bilgisayar kapanıyor..."
 
-@app.route('/command', methods=['GET'])
-def get_command():
-    global latest_command
-    cmd = latest_command
-    latest_command = None
-    return jsonify({"cmd": cmd})
-    
+# Uygulama başlatılıyor
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
